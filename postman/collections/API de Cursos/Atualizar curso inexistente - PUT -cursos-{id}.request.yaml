@@ -1,0 +1,15 @@
+$kind: http-request
+name: Atualizar curso inexistente - PUT /cursos/{id}
+description: ""
+url: http://localhost:8080/cursos/999
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Curso inexistente\",\r
+
+    \  \"cargaHoraria\": 40\r
+
+    }"
+order: 4478651383827456

@@ -1,0 +1,9 @@
+$kind: http-request
+name: Excluir curso inexistente - DELETE /cursos/{id}
+description: ""
+url: http://localhost:8080/cursos/1
+method: DELETE
+body:
+  type: json
+  content: ""
+order: 4501981353661034

@@ -1,4 +1,4 @@
-package br.edu.nassau.api_cursos;
+package br.edu.nassau.apicursos;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

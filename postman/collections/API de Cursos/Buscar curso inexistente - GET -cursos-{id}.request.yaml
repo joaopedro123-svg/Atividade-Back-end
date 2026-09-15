@@ -1,0 +1,15 @@
+$kind: http-request
+name: Buscar curso inexistente - GET /cursos/{id}
+description: ""
+url: http://localhost:8080/cursos/999
+method: GET
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Back-End Frameworks Atualizado\",\r
+
+    \  \"cargaHoraria\": 80\r
+
+    }"
+order: 4357524575807326

@@ -1,0 +1,15 @@
+$kind: http-request
+name: Atualizar curso - PUT /cursos/{id}
+description: ""
+url: http://localhost:8080/cursos/1
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Back-End Frameworks Atualizado\",\r
+
+    \  \"cargaHoraria\": 80\r
+
+    }"
+order: 4298784834010482

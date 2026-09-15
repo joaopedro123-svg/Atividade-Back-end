@@ -1,0 +1,17 @@
+$kind: http-request
+name: Buscar curso por ID - GET /cursos/{id}
+description: ""
+url: http://localhost:8080/cursos/1
+method: GET
+body:
+  type: json
+  content: "{\r
+
+    \  \"id\": 1,\r
+
+    \  \"nome\": \"Back-End Frameworks\",\r
+
+    \  \"cargaHoraria\": 60\r
+
+    }"
+order: 213445420792272

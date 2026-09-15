@@ -1,0 +1,15 @@
+$kind: http-request
+name: Cadastrar curso - POST /cursos
+description: ""
+url: http://localhost:8080/cursos
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Back-End Frameworks\",\r
+
+    \  \"cargaHoraria\": 60\r
+
+    }"
+order: 3307110470910326
