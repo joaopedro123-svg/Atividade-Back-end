@@ -2,60 +2,207 @@
 
 API REST desenvolvida como atividade prática integrada da disciplina de Back-End Frameworks.
 
-O projeto será desenvolvido em Java 21 com Spring Boot, Spring Data JPA e PostgreSQL. A API permitirá cadastrar, consultar, atualizar e remover cursos.
+O sistema permite cadastrar, listar, consultar, atualizar e remover cursos. Os dados são validados pela aplicação e armazenados em um banco PostgreSQL.
 
-## Aula 01 — Introdução ao Back-End e Frameworks
+## Tecnologias utilizadas
 
-### Atividade 01 — Fluxo entre cliente e servidor
+* Java 21
+* Spring Boot
+* Spring Web
+* Spring Data JPA
+* PostgreSQL
+* Maven
+* Postman
 
-O cliente pode ser uma aplicação front-end, um navegador ou uma ferramenta de testes como Postman e Insomnia. O servidor é a aplicação back-end desenvolvida com Spring Boot.
+## Modelo de curso
 
-Quando o cliente consulta os cursos, acontece o seguinte fluxo:
+Cada curso possui os seguintes atributos:
 
-```text
-Cliente
-  -> Request HTTP GET /cursos
-  -> Servidor back-end
-  -> Processamento da solicitação
-  -> Response HTTP com status 200 e os cursos em JSON
-  -> Cliente
-```
+| Campo          | Tipo      | Regra                                 |
+| -------------- | --------- | ------------------------------------- |
+| `id`           | `Long`    | Gerado automaticamente                |
+| `nome`         | `String`  | Obrigatório e não pode estar vazio    |
+| `cargaHoraria` | `Integer` | Obrigatória e deve ser maior que zero |
 
-O cliente envia uma **request HTTP** utilizando o método `GET` para o endereço `/cursos`. O servidor recebe a requisição, realiza o processamento necessário para consultar os cursos cadastrados e devolve uma **response HTTP**.
-
-Quando a consulta é realizada corretamente, a resposta contém o status `200 OK` e uma lista de cursos no formato JSON.
-
-### Atividade 02 — Responsabilidades do back-end
-
-Ao receber uma solicitação para cadastrar um curso, o back-end deverá:
-
-1. Receber os dados enviados pelo cliente por meio de uma requisição HTTP.
-2. Transformar o JSON recebido em um objeto Java da classe `Curso`.
-3. Verificar se o nome do curso foi informado.
-4. Verificar se a carga horária é maior que zero.
-5. Salvar o curso no sistema.
-6. Gerar automaticamente o identificador do curso.
-7. Devolver ao cliente uma resposta HTTP com o curso cadastrado.
-
-O back-end é responsável por receber, processar, validar e armazenar os dados. Portanto, ele não funciona apenas como uma tela de apresentação.
-
-### Atividade 03 — Contrato inicial da API
-
-A API disponibilizará os seguintes endpoints:
-
-| Método HTTP | Endpoint       | Operação                     | Resposta esperada                   |
-| ----------- | -------------- | ---------------------------- | ----------------------------------- |
-| `GET`       | `/cursos`      | Listar todos os cursos       | `200 OK`                            |
-| `GET`       | `/cursos/{id}` | Buscar um curso pelo ID      | `200 OK` ou `404 Not Found`         |
-| `POST`      | `/cursos`      | Cadastrar um novo curso      | `201 Created`                       |
-| `PUT`       | `/cursos/{id}` | Atualizar um curso existente | `200 OK` ou `404 Not Found`         |
-| `DELETE`    | `/cursos/{id}` | Remover um curso             | `204 No Content` ou `404 Not Found` |
-
-Exemplo de JSON utilizado para cadastrar ou atualizar um curso:
+Exemplo:
 
 ```json
 {
+  "id": 1,
   "nome": "Back-End Frameworks",
   "cargaHoraria": 60
 }
 ```
+
+## Arquitetura da aplicação
+
+A aplicação utiliza separação em camadas:
+
+```text
+Cliente
+  → Controller
+  → Service
+  → Repository
+  → PostgreSQL
+```
+
+* **Controller:** recebe as requisições HTTP e devolve as respostas.
+* **Service:** contém as regras de negócio e validações.
+* **Repository:** realiza as operações de persistência.
+* **Model:** representa a entidade `Curso`.
+* **PostgreSQL:** armazena permanentemente os cursos.
+
+O `Controller` não acessa diretamente o banco de dados.
+
+## Endpoints
+
+| Método   | Endpoint       | Operação               | Respostas                                      |
+| -------- | -------------- | ---------------------- | ---------------------------------------------- |
+| `GET`    | `/cursos`      | Listar todos os cursos | `200 OK`                                       |
+| `GET`    | `/cursos/{id}` | Buscar um curso por ID | `200 OK` ou `404 Not Found`                    |
+| `POST`   | `/cursos`      | Cadastrar um curso     | `201 Created` ou `400 Bad Request`             |
+| `PUT`    | `/cursos/{id}` | Atualizar um curso     | `200 OK`, `400 Bad Request` ou `404 Not Found` |
+| `DELETE` | `/cursos/{id}` | Excluir um curso       | `204 No Content` ou `404 Not Found`            |
+
+## Validações
+
+A aplicação não permite:
+
+* nome nulo, vazio ou composto somente por espaços;
+* carga horária nula, igual a zero ou negativa.
+
+Exemplo de resposta para dados inválidos:
+
+```json
+{
+  "erro": "A carga horária deve ser maior que zero."
+}
+```
+
+## Estrutura principal
+
+```text
+src/main/java/br/edu/nassau/apicursos
+├── Application.java
+├── controller
+│   └── CursoController.java
+├── model
+│   └── Curso.java
+├── repository
+│   └── CursoRepository.java
+└── service
+    └── CursoService.java
+```
+
+## Configuração do PostgreSQL
+
+Crie um banco de dados chamado:
+
+```text
+api_cursos
+```
+
+A aplicação utiliza a seguinte conexão:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/api_cursos
+spring.datasource.username=postgres
+spring.datasource.password=${DB_PASSWORD}
+```
+
+A senha não deve ser escrita diretamente no código nem enviada ao GitHub.
+
+No IntelliJ, abra **Run → Edit Configurations** e adicione a variável de ambiente:
+
+```text
+DB_PASSWORD=sua_senha_do_postgresql
+```
+
+## Como executar
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/joaopedro123-svg/Atividade-Back-end.git
+```
+
+Entre na pasta:
+
+```bash
+cd Atividade-Back-end
+```
+
+No Windows PowerShell, defina a senha apenas para a sessão atual:
+
+```powershell
+$env:DB_PASSWORD = "SUA_SENHA"
+```
+
+Execute a aplicação:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+
+A API ficará disponível em:
+
+```text
+http://localhost:8080
+```
+
+## Como executar os testes
+
+Com a variável `DB_PASSWORD` configurada, execute:
+
+```powershell
+.\mvnw.cmd test
+```
+
+O resultado esperado é:
+
+```text
+BUILD SUCCESS
+```
+
+## Testes com Postman
+
+As requisições utilizadas nos testes estão armazenadas na pasta:
+
+```text
+postman/collections/API de Cursos
+```
+
+Foram testados os seguintes cenários:
+
+* cadastro de curso válido;
+* listagem de cursos;
+* busca por ID;
+* atualização de curso;
+* exclusão de curso;
+* busca por ID inexistente;
+* atualização e exclusão de curso inexistente;
+* cadastro com nome vazio;
+* cadastro com carga horária inválida;
+* atualização com dados inválidos.
+
+## Evidência de persistência
+
+A persistência foi comprovada da seguinte forma:
+
+1. um curso foi cadastrado pelo Postman;
+2. a aplicação foi encerrada;
+3. a aplicação foi iniciada novamente;
+4. o curso continuou sendo retornado por `GET /cursos`;
+5. o registro também foi consultado diretamente na tabela `cursos` pelo pgAdmin.
+
+## Evolução da atividade
+
+* **Aula 01:** fluxo cliente-servidor, responsabilidades do back-end e contrato da API.
+* **Aula 02:** criação do projeto Spring Boot, Controller, Service e injeção de dependência.
+* **Aula 03:** modelo `Curso`, conversão JSON e CRUD em memória.
+* **Aula 04:** criação do Repository, separação em camadas e validações.
+* **Aula 05:** integração com PostgreSQL e Spring Data JPA.
+
+## Autor
+
+João Pedro Rodrigues Araújo
