@@ -203,6 +203,23 @@ A persistência foi comprovada da seguinte forma:
 * **Aula 04:** criação do Repository, separação em camadas e validações.
 * **Aula 05:** integração com PostgreSQL e Spring Data JPA.
 
+## Evidências dos testes
+
+| Teste realizado | Evidência |
+| --- | --- |
+| Cadastro de curso — `201 Created` | [Visualizar](docs/evidencias/01-post-cadastrar-curso-201.jpeg) |
+| Listagem de cursos — `200 OK` | [Visualizar](docs/evidencias/02-get-listar-cursos-200.jpeg) |
+| Busca por ID — `200 OK` | [Visualizar](docs/evidencias/03-get-buscar-curso-por-id-200.jpeg) |
+| Atualização de curso — `200 OK` | [Visualizar](docs/evidencias/04-put-atualizar-curso-200.jpeg) |
+| Busca de curso inexistente — `404 Not Found` | [Visualizar](docs/evidencias/05-get-curso-inexistente-404.jpeg) |
+| Atualização de curso inexistente — `404 Not Found` | [Visualizar](docs/evidencias/06-put-curso-inexistente-404.jpeg) |
+| Exclusão de curso inexistente — `404 Not Found` | [Visualizar](docs/evidencias/07-delete-curso-inexistente-404.jpeg) |
+| Cadastro com carga horária inválida — `400 Bad Request` | [Visualizar](docs/evidencias/08-post-carga-horaria-invalida-400.jpeg) |
+| Cadastro válido após validações — `201 Created` | [Visualizar](docs/evidencias/09-post-cadastrar-curso-valido-201.jpeg) |
+| Atualização com dados inválidos — `400 Bad Request` | [Visualizar](docs/evidencias/10-put-dados-invalidos-400.jpeg) |
+| Persistência após reiniciar a API — `200 OK` | [Visualizar](docs/evidencias/11-get-persistencia-apos-reinicio-200.jpeg) |
+| Registro armazenado no PostgreSQL | [Visualizar](docs/evidencias/12-pgadmin-registro-persistido.jpeg) |
+
 ## Autor
 
 João Pedro Rodrigues Araújo
