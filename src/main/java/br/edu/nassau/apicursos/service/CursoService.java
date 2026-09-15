@@ -19,42 +19,48 @@ public class CursoService {
     public Curso cadastrar(Curso curso) {
         validarCurso(curso);
         curso.setNome(curso.getNome().trim());
-        return cursoRepository.salvar(curso);
+        return cursoRepository.save(curso);
     }
 
     public List<Curso> listarTodos() {
-        return cursoRepository.listarTodos();
+        return cursoRepository.findAll();
     }
 
     public Optional<Curso> buscarPorId(Long id) {
-        return cursoRepository.buscarPorId(id);
+        return cursoRepository.findById(id);
     }
 
     public Optional<Curso> atualizar(Long id, Curso novosDados) {
         validarCurso(novosDados);
 
-        Optional<Curso> cursoEncontrado = cursoRepository.buscarPorId(id);
-
-        if (cursoEncontrado.isPresent()) {
-            Curso curso = cursoEncontrado.get();
-            curso.setNome(novosDados.getNome().trim());
-            curso.setCargaHoraria(novosDados.getCargaHoraria());
-        }
-
-        return cursoEncontrado;
+        return cursoRepository.findById(id)
+                .map(curso -> {
+                    curso.setNome(novosDados.getNome().trim());
+                    curso.setCargaHoraria(novosDados.getCargaHoraria());
+                    return cursoRepository.save(curso);
+                });
     }
 
     public boolean remover(Long id) {
-        return cursoRepository.remover(id);
+        if (!cursoRepository.existsById(id)) {
+            return false;
+        }
+
+        cursoRepository.deleteById(id);
+        return true;
     }
 
     private void validarCurso(Curso curso) {
         if (curso == null) {
-            throw new IllegalArgumentException("Os dados do curso são obrigatórios.");
+            throw new IllegalArgumentException(
+                    "Os dados do curso são obrigatórios."
+            );
         }
 
         if (curso.getNome() == null || curso.getNome().isBlank()) {
-            throw new IllegalArgumentException("O nome do curso é obrigatório.");
+            throw new IllegalArgumentException(
+                    "O nome do curso é obrigatório."
+            );
         }
 
         if (curso.getCargaHoraria() == null || curso.getCargaHoraria() <= 0) {
