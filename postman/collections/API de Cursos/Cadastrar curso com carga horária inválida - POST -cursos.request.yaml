@@ -1,0 +1,15 @@
+$kind: http-request
+name: Cadastrar curso com carga horária inválida - POST /cursos
+description: ""
+url: http://localhost:8080/cursos
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Banco de Dados\",\r
+
+    \  \"cargaHoraria\": 0\r
+
+    }"
+order: 4503589307270509

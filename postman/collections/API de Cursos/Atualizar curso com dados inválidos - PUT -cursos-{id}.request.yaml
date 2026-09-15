@@ -1,0 +1,15 @@
+$kind: http-request
+name: Atualizar curso com dados inválidos - PUT /cursos/{id}
+description: ""
+url: " http://localhost:8080/cursos/1"
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"Curso inválido\",\r
+
+    \  \"cargaHoraria\": -10\r
+
+    }"
+order: 4503589550626817

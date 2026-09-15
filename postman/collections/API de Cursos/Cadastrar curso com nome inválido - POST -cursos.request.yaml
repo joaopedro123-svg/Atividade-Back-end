@@ -1,0 +1,15 @@
+$kind: http-request
+name: Cadastrar curso com nome inválido - POST /cursos
+description: ""
+url: " http://localhost:8080/cursos"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"nome\": \"\",\r
+
+    \  \"cargaHoraria\": 60\r
+
+    }"
+order: 4502944521501330

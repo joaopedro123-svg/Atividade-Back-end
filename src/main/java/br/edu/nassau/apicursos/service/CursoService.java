@@ -1,42 +1,43 @@
 package br.edu.nassau.apicursos.service;
 
 import br.edu.nassau.apicursos.model.Curso;
+import br.edu.nassau.apicursos.repository.CursoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CursoService {
 
-    private final List<Curso> cursos = new ArrayList<>();
-    private Long proximoId = 1L;
+    private final CursoRepository cursoRepository;
+
+    public CursoService(CursoRepository cursoRepository) {
+        this.cursoRepository = cursoRepository;
+    }
 
     public Curso cadastrar(Curso curso) {
-        curso.setId(proximoId);
-        proximoId++;
-
-        cursos.add(curso);
-        return curso;
+        validarCurso(curso);
+        curso.setNome(curso.getNome().trim());
+        return cursoRepository.salvar(curso);
     }
 
     public List<Curso> listarTodos() {
-        return new ArrayList<>(cursos);
+        return cursoRepository.listarTodos();
     }
 
     public Optional<Curso> buscarPorId(Long id) {
-        return cursos.stream()
-                .filter(curso -> curso.getId().equals(id))
-                .findFirst();
+        return cursoRepository.buscarPorId(id);
     }
 
     public Optional<Curso> atualizar(Long id, Curso novosDados) {
-        Optional<Curso> cursoEncontrado = buscarPorId(id);
+        validarCurso(novosDados);
+
+        Optional<Curso> cursoEncontrado = cursoRepository.buscarPorId(id);
 
         if (cursoEncontrado.isPresent()) {
             Curso curso = cursoEncontrado.get();
-            curso.setNome(novosDados.getNome());
+            curso.setNome(novosDados.getNome().trim());
             curso.setCargaHoraria(novosDados.getCargaHoraria());
         }
 
@@ -44,6 +45,22 @@ public class CursoService {
     }
 
     public boolean remover(Long id) {
-        return cursos.removeIf(curso -> curso.getId().equals(id));
+        return cursoRepository.remover(id);
+    }
+
+    private void validarCurso(Curso curso) {
+        if (curso == null) {
+            throw new IllegalArgumentException("Os dados do curso são obrigatórios.");
+        }
+
+        if (curso.getNome() == null || curso.getNome().isBlank()) {
+            throw new IllegalArgumentException("O nome do curso é obrigatório.");
+        }
+
+        if (curso.getCargaHoraria() == null || curso.getCargaHoraria() <= 0) {
+            throw new IllegalArgumentException(
+                    "A carga horária deve ser maior que zero."
+            );
+        }
     }
 }
